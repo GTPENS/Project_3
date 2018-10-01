@@ -33,7 +33,6 @@ public class Player : MonoBehaviour {
         }
 
         if (Mathf.Abs(transform.position.x) <= 2f)
-            Debug.Log("MWATEK");
-            //transform.Translate(speed, 0, 0);
+            transform.Translate(speed, 0, 0);
     }
 }
