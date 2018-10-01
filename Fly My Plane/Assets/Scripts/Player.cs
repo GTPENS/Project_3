@@ -45,8 +45,10 @@ public class Player : MonoBehaviour {
     {
         if(collision.gameObject.tag == "Asteroid")
         {
+            GameObject explosionGO = Instantiate(explosion, transform.position, Quaternion.identity);
+            explosionGO.transform.position = new Vector2(transform.position.x, transform.position.y + 0.5f);
             Destroy(collision.gameObject);
-            GameObject explosionGO = Instantiate(explosion, transform.position = new Vector2(transform.position.x, transform.position.y + 1), Quaternion.identity);
+            Destroy(explosionGO, 2f);
         }
     }
 }
