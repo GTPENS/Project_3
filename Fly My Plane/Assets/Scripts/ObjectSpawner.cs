@@ -10,12 +10,12 @@ public class ObjectSpawner : MonoBehaviour {
     public GameObject[] asteroid;
     
 	// Use this for initialization
-	void Start () {
+	private void Start () {
         Invoke("SpawnAsteroid", spawnRate);
         InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
 	}
 	
-    void SpawnAsteroid()
+    public void SpawnAsteroid()
     {
         Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
         Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
@@ -23,7 +23,7 @@ public class ObjectSpawner : MonoBehaviour {
         NextAsteroidSpawn();
     }
 
-    void NextAsteroidSpawn()
+    private void NextAsteroidSpawn()
     {
         float spawnInSeconds;
         if (spawnRate > 1f)
@@ -33,7 +33,7 @@ public class ObjectSpawner : MonoBehaviour {
         Invoke("SpawnAsteroid", spawnInSeconds);
     }
 
-    void IncreaseSpawnRate()
+    private void IncreaseSpawnRate()
     {
         if (spawnRate > 1f)
             spawnRate--;
