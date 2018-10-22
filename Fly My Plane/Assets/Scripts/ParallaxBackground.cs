@@ -16,10 +16,10 @@ public class ParallaxBackground : MonoBehaviour {
     void Update()
     {
         offset.y += ySpeed * Time.deltaTime;
-        if (offset.y > 0.1f)
-            offset.y -= 0.9f;
-        else if (offset.y < -0.1f)
-            offset.y += 0.9f;
+        if (offset.y > 1f)
+            offset.y -= 1f;
+        else if (offset.y < -1f)
+            offset.y += 1f;
         mat.mainTextureOffset = offset;
     }
 }

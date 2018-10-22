@@ -75,10 +75,10 @@ public class Asteroid : MonoBehaviour {
         switch (asteroidSpeed)
         {
             case AsteroidSpeed.FAST:
-                Speed = 3f;
+                Speed = 5f;
                 break;
             case AsteroidSpeed.SLOW:
-                Speed = 2f;
+                Speed = 3f;
                 break;
         }
 
@@ -108,8 +108,6 @@ public class Asteroid : MonoBehaviour {
     }
 	
 	private void Update () {
-        Debug.Log("Asteroid Type = " + asteroidTypes + " Health = " + Health);
-        
         CheckHealth();
         AsteroidMove();
 	}
