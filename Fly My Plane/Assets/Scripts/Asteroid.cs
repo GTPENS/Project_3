@@ -1,34 +1,32 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum AsteroidTypes
 {
-    NORMAL,
-    SMALL,
-    ARMORED,
-    SPLITTING,
-    FAST
-}
-
-public enum AsteroidSpeed
-{
-    SLOW,
-    FAST
+    NORMAL = 1,
+    SMALL = 2,
+    ARMORED = 3,
+    SPLITTING = 4,
+    FAST = 5
 }
 
 public class Asteroid : MonoBehaviour {
 
+    private string asteroidName;
     private float speed;
     private float health;
     private float damage;
+    private int asteroidId;
+
+    [SerializeField] private AsteroidTypes asteroidTypes;
 
     private GameObject explosion;
+    private GameObject splittingObject;
 
     private Rigidbody2D rb;
-
-    public AsteroidTypes asteroidTypes;
-    public AsteroidSpeed asteroidSpeed;
+    
     public float Speed
     {
         get
@@ -69,45 +67,18 @@ public class Asteroid : MonoBehaviour {
     }
 
     private void Start () {
+        asteroidId = Convert.ToInt32(asteroidTypes);
+        asteroidName = PersistentManager.getAsteroidName(asteroidId);
+        speed = PersistentManager.getAsteroidSpeed(asteroidId);
+        health = PersistentManager.getAsteroidHealth(asteroidId);
+        damage = PersistentManager.getAsteroidDamage(asteroidId);
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load("Prefabs/Explosion") as GameObject;
-
-        switch (asteroidSpeed)
-        {
-            case AsteroidSpeed.FAST:
-                Speed = 5f;
-                break;
-            case AsteroidSpeed.SLOW:
-                Speed = 3f;
-                break;
-        }
-
-        switch (asteroidTypes)
-        {
-            case AsteroidTypes.NORMAL:
-                Health = 3;
-                Damage = 4;
-                break;
-            case AsteroidTypes.SMALL:
-                Health = 1;
-                Damage = 2;
-                break;
-            case AsteroidTypes.FAST:
-                Health = 1;
-                Damage = 2;
-                break;
-            case AsteroidTypes.ARMORED:
-                Health = 6;
-                Damage = 4;
-                break;
-            case AsteroidTypes.SPLITTING:
-                Health = 3;
-                Damage = 4;
-                break;
-        }
+        splittingObject = Resources.Load("Prefabs/Asteroid_Small") as GameObject;
     }
 	
 	private void Update () {
+        Debug.Log("Name = " + asteroidName);
         CheckHealth();
         AsteroidMove();
 	}
@@ -140,6 +111,13 @@ public class Asteroid : MonoBehaviour {
             Player player;
             player = FindObjectOfType<Player>();
             Health -= player.Damage;
+            if (asteroidName == "Splitting")
+            {
+                GameObject splitting1 = Instantiate(splittingObject, transform.position, Quaternion.identity);
+                GameObject splitting2 = Instantiate(splittingObject, transform.position, Quaternion.identity);
+                splitting1.transform.position = new Vector2(transform.position.x + 0.5f, transform.position.y);
+                splitting2.transform.position = new Vector2(transform.position.x - 0.5f, transform.position.y);
+            }
             Destroy(collision.gameObject);
         }
     }

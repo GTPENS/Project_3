@@ -17,8 +17,8 @@ public class ObjectSpawner : MonoBehaviour {
 	
     public void SpawnAsteroid()
     {
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
         Instantiate(asteroid[Random.Range(0, 3)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
         NextAsteroidSpawn();
     }

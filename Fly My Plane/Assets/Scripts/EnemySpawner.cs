@@ -20,8 +20,8 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy()
     {
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));
+        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
         Instantiate(enemy[Random.Range(0, 4)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
         NextEnemySpawn();
     }
