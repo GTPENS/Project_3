@@ -18,10 +18,14 @@ public class Enemy : MonoBehaviour {
     private float health;
     private float damage;
     private int enemyId;
+
     [SerializeField] private EnemyTypes enemyTypes;
+
     private GameObject explosion;
+
     private Rigidbody2D rb;
-    
+
+    private UI_Manager uiManager;
 
     public float Speed {
         get {
@@ -55,6 +59,7 @@ public class Enemy : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        uiManager = FindObjectOfType<UI_Manager>();
         enemyId = Convert.ToInt32(enemyTypes);
         enemyName = PersistentManager.getEnemyName(enemyId);
         speed = PersistentManager.getEnemySpeed(enemyId);
@@ -82,7 +87,8 @@ public class Enemy : MonoBehaviour {
         {
             GameObject explosionGO = Instantiate(explosion, transform.position, Quaternion.identity);
             explosionGO.transform.position = new Vector2(transform.position.x, transform.position.y + 0.5f);
-            Destroy(explosionGO, 1.7f);
+            uiManager.AddScore(PersistentManager.getEnemyScore(enemyId));
+            Destroy(explosionGO, 1.1f);
             Destroy(gameObject);
         }
     }

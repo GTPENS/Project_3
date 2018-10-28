@@ -6,16 +6,12 @@ public class Player : MonoBehaviour {
 
     [SerializeField] private float health;
     [SerializeField] private float damage;
-    private float projectileSpeed = 10f;
-    private const float radius = 1f;
-
-    private int numberOfProjectiles;
-
-    private float fireRate = 0.5f;
-    private float nextFire = 0.0f;
+    [SerializeField] private float playerSpeed;
+    [SerializeField] private float offsetDamage;
     
-    private GameObject bullet;
-    private GameObject gun;
+    private Asteroid asteroid;
+    private Enemy enemy;
+    private UI_Manager uiManager;
 
     public float Health
     {
@@ -43,46 +39,73 @@ public class Player : MonoBehaviour {
         }
     }
 
-    public int NumberOfProjectiles
+    public float PlayerSpeed
     {
         get
         {
-            return numberOfProjectiles;
+            return playerSpeed;
         }
 
         set
         {
-            numberOfProjectiles = value;
+            playerSpeed = value;
         }
     }
 
     private void Start()
     {
-        numberOfProjectiles = 1;
-        bullet = Resources.Load("Prefabs/Bullet") as GameObject;
-        gun = GameObject.Find("Gun");
+        uiManager = FindObjectOfType<UI_Manager>();
     }
 
     private void Update ()
     {
+        
+        if (Input.acceleration.x != 0)
+        {
+            PlayerSpeed = Input.acceleration.x;
+            Move(PlayerSpeed / 5);
+        }
+        
+        if (Mathf.Abs(transform.position.x) >= 3f)
+        {
+            uiManager.ReduceHealth(offsetDamage * Time.deltaTime);
+        }
+
+        //development testing
         if (Input.GetKey(KeyCode.D))
         {
-            Move(5 * Time.deltaTime);
+            Move(PlayerSpeed * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.A))
         {
-            Move(-5 * Time.deltaTime);
+            Move(-PlayerSpeed * Time.deltaTime);
         }
 
-        if (Input.acceleration.x != 0)
-        {
-            Move(Input.acceleration.x / 5);
-        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            numberOfProjectiles++;
+            GameObject[] enemies;
+            GameObject[] asteroids;
+            enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
+            Debug.Log(enemies.Length);
+            Debug.Log(asteroids.Length);
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i].GetComponent<Enemy>().Health = 0;
+            }
+            for (int i = 0; i < asteroids.Length; i++)
+            {
+                asteroids[i].GetComponent<Asteroid>().Health = 0;
+            }
         }
-        Fire();
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            StartCoroutine(GameManager.instance.TimeDilation());
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(GameManager.instance.Invulnerable());
+        }
     }
 
     public void Move(float speed)
@@ -96,65 +119,34 @@ public class Player : MonoBehaviour {
         {
             speed = -0.5f;
         }
-
-        if (Mathf.Abs(transform.position.x) <= 3f)
-        {
-            transform.Translate(speed, 0, 0);
-            //health ngurang
-        }
-    }
-
-    public void Fire()
-    {
-        if(Time.time > nextFire)
-        {
-            nextFire = Time.time + fireRate;
-
-            if(numberOfProjectiles > 1)
-            {
-                float angleStep = 30 / numberOfProjectiles;
-                float angle = -15;
-
-                for (int i = 0; i <= numberOfProjectiles; i++)
-                {
-                    float projectileDirXPosition = gun.transform.position.x + Mathf.Sin((angle * Mathf.PI) / 180) * radius;
-                    float projectileDirYPosition = gun.transform.position.y + Mathf.Cos((angle * Mathf.PI) / 180) * radius;
-
-                    Vector3 projectileVector = new Vector3(projectileDirXPosition, projectileDirYPosition, 0);
-                    Vector3 projectileMoveDirection = (projectileVector - gun.transform.position).normalized * projectileSpeed;
-
-                    GameObject tmpObj = Instantiate(bullet, gun.transform.position, Quaternion.identity);
-                    tmpObj.GetComponent<Rigidbody2D>().velocity = new Vector3(projectileMoveDirection.x, projectileMoveDirection.y, 0);
-
-                    Destroy(tmpObj, 2f);
-
-                    angle += angleStep;
-                }
-            }
-            else
-            {
-                GameObject bulletGO = Instantiate(bullet, gun.transform.position, gun.transform.rotation);
-                bulletGO.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 10f);
-                Destroy(bulletGO, 2f);
-            }
-        }
+        
+        transform.Translate(speed, 0, 0);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Asteroid")
         {
-            Asteroid asteroid;
             asteroid = FindObjectOfType<Asteroid>();
-            Health -= asteroid.Damage;
+            uiManager.ReduceHealth(asteroid.Damage);
             
             Destroy(collision.gameObject);
         }
         if (collision.gameObject.tag == "Enemy")
         {
-            Enemy enemy;
             enemy = FindObjectOfType<Enemy>();
-            Health -= enemy.Damage;
+            uiManager.ReduceHealth(enemy.Damage);
+
+            Destroy(collision.gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy Bullet")
+        {
+            enemy = FindObjectOfType<Enemy>();
+            uiManager.ReduceHealth(enemy.Damage);
 
             Destroy(collision.gameObject);
         }

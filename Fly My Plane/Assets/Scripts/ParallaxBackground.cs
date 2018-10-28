@@ -3,23 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ParallaxBackground : MonoBehaviour {
-    private float ySpeed = 0.3f;
-    public Material mat;
-    Vector2 offset = Vector2.zero;
-    // Use this for initialization
+    [SerializeField]private float scrollSpeed;
+    [SerializeField]private float tileSizeZ;
+
+    private Vector3 startPosition;
+
     void Start()
     {
-        mat = GetComponent<MeshRenderer>().material;
+        startPosition = transform.position;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        offset.y += ySpeed * Time.deltaTime;
-        if (offset.y > 1f)
-            offset.y -= 1f;
-        else if (offset.y < -1f)
-            offset.y += 1f;
-        mat.mainTextureOffset = offset;
+        float newPosition = Mathf.Repeat(Time.time * scrollSpeed, tileSizeZ);
+        transform.position = startPosition + Vector3.up * newPosition;
     }
 }

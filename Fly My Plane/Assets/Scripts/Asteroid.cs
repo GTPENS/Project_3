@@ -26,6 +26,8 @@ public class Asteroid : MonoBehaviour {
     private GameObject splittingObject;
 
     private Rigidbody2D rb;
+
+    private UI_Manager uiManager;
     
     public float Speed
     {
@@ -67,13 +69,14 @@ public class Asteroid : MonoBehaviour {
     }
 
     private void Start () {
+        uiManager = FindObjectOfType<UI_Manager>();
         asteroidId = Convert.ToInt32(asteroidTypes);
         asteroidName = PersistentManager.getAsteroidName(asteroidId);
         speed = PersistentManager.getAsteroidSpeed(asteroidId);
         health = PersistentManager.getAsteroidHealth(asteroidId);
         damage = PersistentManager.getAsteroidDamage(asteroidId);
         rb = GetComponent<Rigidbody2D>();
-        explosion = Resources.Load("Prefabs/Explosion") as GameObject;
+        explosion = Resources.Load("Prefabs/Exploding_Asteroid") as GameObject;
         splittingObject = Resources.Load("Prefabs/Asteroid_Small") as GameObject;
     }
 	
@@ -94,7 +97,8 @@ public class Asteroid : MonoBehaviour {
         {
             GameObject explosionGO = Instantiate(explosion, transform.position, Quaternion.identity);
             explosionGO.transform.position = new Vector2(transform.position.x, transform.position.y + 0.5f);
-            Destroy(explosionGO, 1.7f);
+            uiManager.AddScore(PersistentManager.getAsteroidScore(asteroidId));
+            Destroy(explosionGO, 1.1f);
             Destroy(gameObject);
         }
     }
