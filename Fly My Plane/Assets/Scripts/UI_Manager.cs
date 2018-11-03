@@ -11,10 +11,10 @@ public class UI_Manager : MonoBehaviour {
     private Player player;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         player = FindObjectOfType<Player>();
-        sliderHealth.maxValue = player.Health;
+        sliderHealth.maxValue = player.MaxHealth;
         sliderHealth.value = player.Health;
         txtScore.text = "" + GameManager.instance.Score;
     }
@@ -22,6 +22,7 @@ public class UI_Manager : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        sliderHealth.maxValue = player.MaxHealth;
         sliderHealth.value = player.Health;
         txtScore.text = "" + GameManager.instance.Score;
     }

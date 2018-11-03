@@ -61,6 +61,15 @@ public class Gun : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        switch(PlayerPrefs.GetInt("Player Damage"))
+        {
+            case 3:
+                NumberOfProjectiles = 2;
+                break;
+            case 5:
+                NumberOfProjectiles = 4;
+                break;
+        }
         Fire();
     }
 

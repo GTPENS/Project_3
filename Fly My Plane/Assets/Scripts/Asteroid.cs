@@ -81,7 +81,6 @@ public class Asteroid : MonoBehaviour {
     }
 	
 	private void Update () {
-        Debug.Log("Name = " + asteroidName);
         CheckHealth();
         AsteroidMove();
 	}
