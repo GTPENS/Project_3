@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum EnemyTypes
 {
@@ -22,6 +23,7 @@ public class Enemy : MonoBehaviour {
     [SerializeField] private EnemyTypes enemyTypes;
 
     private GameObject explosion;
+    private GameObject[] powerUp = new GameObject[5];
 
     private Rigidbody2D rb;
 
@@ -67,6 +69,11 @@ public class Enemy : MonoBehaviour {
         damage = PersistentManager.getEnemyDamage(enemyId);
         rb = GetComponent<Rigidbody2D>();
         explosion = Resources.Load("Prefabs/Explosion") as GameObject;
+        powerUp[0] = Resources.Load("Prefabs/PowerUp_Shield") as GameObject;
+        powerUp[1] = Resources.Load("Prefabs/PowerUp_Supernova") as GameObject;
+        powerUp[2] = Resources.Load("Prefabs/PowerUp_TimeDilation") as GameObject;
+        powerUp[3] = Resources.Load("Prefabs/Upgrade_Defensive") as GameObject;
+        powerUp[4] = Resources.Load("Prefabs/Upgrade_Offensive") as GameObject;
     }
 	
 	// Update is called once per frame
@@ -89,6 +96,8 @@ public class Enemy : MonoBehaviour {
             explosionGO.transform.position = new Vector2(transform.position.x, transform.position.y + 0.5f);
             uiManager.AddScore(PersistentManager.getEnemyScore(enemyId));
             Destroy(explosionGO, 1.1f);
+            if (enemyId == 4)
+                Instantiate(powerUp[Random.Range(0, 5)], transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

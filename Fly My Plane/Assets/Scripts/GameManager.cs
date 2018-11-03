@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
 
     private void Update()
     {
-        
+
     }
 
     public IEnumerator TimeDilation()

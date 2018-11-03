@@ -7,7 +7,7 @@ public class EnemySpawner : MonoBehaviour
 {
 
     [SerializeField] private float spawnRate = 25f;
-
+    private int spawnChance;
 
     public GameObject[] enemy;
 
@@ -20,9 +20,18 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy()
     {
+        spawnChance = Random.Range(0, 100);
+        Debug.Log("chance = " + spawnChance);
         Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
         Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
-        Instantiate(enemy[Random.Range(0, 4)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+        if(spawnChance > 75)
+            Instantiate(enemy[0], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+        else if(spawnChance > 50)
+            Instantiate(enemy[1], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+        else if(spawnChance > 25)
+            Instantiate(enemy[2], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+        else if(spawnChance > 10)
+            Instantiate(enemy[3], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
         NextEnemySpawn();
     }
 

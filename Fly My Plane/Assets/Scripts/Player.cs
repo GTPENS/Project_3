@@ -80,32 +80,6 @@ public class Player : MonoBehaviour {
         {
             Move(-PlayerSpeed * Time.deltaTime);
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GameObject[] enemies;
-            GameObject[] asteroids;
-            enemies = GameObject.FindGameObjectsWithTag("Enemy");
-            asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
-            Debug.Log(enemies.Length);
-            Debug.Log(asteroids.Length);
-            for (int i = 0; i < enemies.Length; i++)
-            {
-                enemies[i].GetComponent<Enemy>().Health = 0;
-            }
-            for (int i = 0; i < asteroids.Length; i++)
-            {
-                asteroids[i].GetComponent<Asteroid>().Health = 0;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            StartCoroutine(GameManager.instance.TimeDilation());
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            StartCoroutine(GameManager.instance.Invulnerable());
-        }
     }
 
     public void Move(float speed)
@@ -147,6 +121,57 @@ public class Player : MonoBehaviour {
         {
             enemy = FindObjectOfType<Enemy>();
             uiManager.ReduceHealth(enemy.Damage);
+
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.gameObject.tag == "Supernova")
+        {
+            Debug.Log("Supernova");
+            GameObject[] enemies;
+            GameObject[] asteroids;
+            enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
+
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                enemies[i].GetComponent<Enemy>().Health = 0;
+            }
+            for (int i = 0; i < asteroids.Length; i++)
+            {
+                asteroids[i].GetComponent<Asteroid>().Health = 0;
+            }
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.gameObject.tag == "Shield")
+        {
+            Debug.Log("Shield");
+
+            StartCoroutine(GameManager.instance.Invulnerable());
+
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.gameObject.tag == "Time Dilation")
+        {
+            Debug.Log("Time Dilation");
+
+            StartCoroutine(GameManager.instance.TimeDilation());
+
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.gameObject.tag == "Offensive")
+        {
+            Debug.Log("Offensive");
+
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.gameObject.tag == "Defensive")
+        {
+            Debug.Log("Defensive");
 
             Destroy(collision.gameObject);
         }

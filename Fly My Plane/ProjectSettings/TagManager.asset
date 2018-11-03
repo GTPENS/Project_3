@@ -8,6 +8,12 @@ TagManager:
   - Bullet
   - Enemy
   - Enemy Bullet
+  - Supernova
+  - Shield
+  - Offensive
+  - Defensive
+  - Power Up
+  - Time Dilation
   layers:
   - Default
   - TransparentFX
@@ -44,4 +50,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 2195387447
     locked: 0
