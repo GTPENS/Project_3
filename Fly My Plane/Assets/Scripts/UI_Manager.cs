@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class UI_Manager : MonoBehaviour {
 
-    [SerializeField] private Slider sliderHealth;
-    [SerializeField] private Text txtScore;
+    public Slider sliderHealth;
+    public Text txtScore;
     private Player player;
 
     // Use this for initialization
@@ -46,12 +46,14 @@ public class UI_Manager : MonoBehaviour {
     {
         pauseMenu.SetActive(true);
         Time.timeScale = 0;
+        FindObjectOfType<Player>().enabled = false;
     }
 
     public void ResumeGame(GameObject pauseMenu)
     {
         pauseMenu.SetActive(false);
         Time.timeScale = 1;
+        FindObjectOfType<Player>().enabled = true;
     }
     public void QuitGame()
     {
