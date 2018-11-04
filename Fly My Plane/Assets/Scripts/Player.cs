@@ -110,7 +110,7 @@ public class Player : MonoBehaviour {
         {
             uiManager.ReduceHealth(offsetDamage * Time.deltaTime);
         }
-        CheckGameOver();
+        
         //development testing
         if (Input.GetKey(KeyCode.D))
         {
@@ -144,14 +144,7 @@ public class Player : MonoBehaviour {
         
         transform.Translate(speed, 0, 0);
     }
-
-    private void CheckGameOver()
-    {
-        if(Health <= 0)
-        {
-            Debug.Log("Mwatek");
-        }
-    }
+    
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
