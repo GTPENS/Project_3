@@ -98,6 +98,8 @@ public class Enemy : MonoBehaviour {
             Destroy(explosionGO, 1.1f);
             if (enemyId == 4)
                 Instantiate(powerUp[Random.Range(0, 5)], transform.position, Quaternion.identity);
+
+            AudioManager.instance.StopAudio();
             Destroy(gameObject);
         }
     }
@@ -109,6 +111,7 @@ public class Enemy : MonoBehaviour {
             Player player;
             player = FindObjectOfType<Player>();
             Health -= player.Damage;
+            AudioManager.instance.PlayOtherSFX(1);
             Destroy(collision.gameObject);
         }
     }

@@ -114,6 +114,7 @@ public class Asteroid : MonoBehaviour {
             Player player;
             player = FindObjectOfType<Player>();
             Health -= player.Damage;
+            AudioManager.instance.PlayOtherSFX(1);
             if (asteroidName == "Splitting")
             {
                 GameObject splitting1 = Instantiate(splittingObject, transform.position, Quaternion.identity);

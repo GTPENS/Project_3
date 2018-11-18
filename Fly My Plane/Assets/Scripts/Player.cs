@@ -152,7 +152,8 @@ public class Player : MonoBehaviour {
         {
             asteroid = FindObjectOfType<Asteroid>();
             uiManager.ReduceHealth(asteroid.Damage);
-            
+            AudioManager.instance.PlayOtherSFX(1);
+
             Destroy(collision.gameObject);
         }
     }
@@ -163,6 +164,7 @@ public class Player : MonoBehaviour {
         {
             enemy = FindObjectOfType<Enemy>();
             uiManager.ReduceHealth(enemy.Damage);
+            AudioManager.instance.PlayOtherSFX(1);
 
             Destroy(collision.gameObject);
         }
@@ -171,6 +173,7 @@ public class Player : MonoBehaviour {
         {
             enemy = FindObjectOfType<Enemy>();
             uiManager.ReduceHealth(enemy.Damage);
+            AudioManager.instance.PlayOtherSFX(1);
 
             Destroy(collision.gameObject);
         }
@@ -183,6 +186,7 @@ public class Player : MonoBehaviour {
             enemies = GameObject.FindGameObjectsWithTag("Enemy");
             asteroids = GameObject.FindGameObjectsWithTag("Asteroid");
 
+            AudioManager.instance.PlayOtherSFX(3);
             for (int i = 0; i < enemies.Length; i++)
             {
                 enemies[i].GetComponent<Enemy>().Health = 0;
@@ -197,7 +201,7 @@ public class Player : MonoBehaviour {
         if (collision.gameObject.tag == "Shield")
         {
             Debug.Log("Shield");
-
+            AudioManager.instance.PlayOtherSFX(3);
             StartCoroutine(GameManager.instance.Invulnerable());
 
             Destroy(collision.gameObject);
@@ -206,7 +210,7 @@ public class Player : MonoBehaviour {
         if (collision.gameObject.tag == "Time Dilation")
         {
             Debug.Log("Time Dilation");
-
+            AudioManager.instance.PlayOtherSFX(3);
             StartCoroutine(GameManager.instance.TimeDilation());
 
             Destroy(collision.gameObject);
@@ -215,6 +219,7 @@ public class Player : MonoBehaviour {
         if (collision.gameObject.tag == "Offensive")
         {
             Debug.Log("Offensive");
+            AudioManager.instance.PlayOtherSFX(4);
             if (GetPrefsDamage() < 5)
             {
                 PlayerPrefs.SetInt("Player Damage", GetPrefsDamage() + 1);
@@ -225,6 +230,7 @@ public class Player : MonoBehaviour {
         if (collision.gameObject.tag == "Defensive")
         {
             Debug.Log("Defensive");
+            AudioManager.instance.PlayOtherSFX(5);
             if (GetPrefsHealth() < 5)
             {
                 PlayerPrefs.SetInt("Player Health", GetPrefsHealth() + 1);
@@ -235,6 +241,7 @@ public class Player : MonoBehaviour {
     }
     void DefensiveUpgrade()
     {
+        AudioManager.instance.PlayOtherSFX(5);
         if (GetPrefsHealth() < 5)
         {
             PlayerPrefs.SetInt("Player Health", GetPrefsHealth() + 1);
@@ -243,6 +250,7 @@ public class Player : MonoBehaviour {
     }
     void OffensiveUpgrade()
     {
+        AudioManager.instance.PlayOtherSFX(4);
         if (GetPrefsDamage() < 5)
         {
             PlayerPrefs.SetInt("Player Damage", GetPrefsDamage() + 1);

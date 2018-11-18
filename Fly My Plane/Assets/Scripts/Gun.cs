@@ -93,6 +93,7 @@ public class Gun : MonoBehaviour {
                     Vector3 projectileMoveDirection = (projectileVector - transform.position).normalized * ProjectileSpeed;
 
                     GameObject tmpObj = Instantiate(bullet, transform.position, Quaternion.identity);
+                    AudioManager.instance.PlayAudio(2);
                     tmpObj.GetComponent<Rigidbody2D>().velocity = new Vector3(projectileMoveDirection.x, projectileMoveDirection.y, 0);
 
                     Destroy(tmpObj, 2f);
@@ -105,10 +106,12 @@ public class Gun : MonoBehaviour {
                 GameObject bulletGO = Instantiate(bullet, transform.position, transform.rotation);
                 if(!isEnemy)
                 {
+                    AudioManager.instance.PlayAudio(2);
                     bulletGO.GetComponent<Rigidbody2D>().velocity = new Vector2(0, ProjectileSpeed);
                 }
                 else
                 {
+                    AudioManager.instance.PlayOtherSFX(2);
                     bulletGO.gameObject.tag = "Enemy Bullet";
                     bulletGO.GetComponent<Rigidbody2D>().velocity = new Vector2(0, -ProjectileSpeed);
                 }

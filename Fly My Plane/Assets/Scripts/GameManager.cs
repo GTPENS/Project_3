@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
 
     private int score;
     private bool isGameOver;
+    private bool seen;
     private Player player;
 
     string placementId = "rewardedVideo";
@@ -31,6 +32,32 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public bool Seen
+    {
+        get
+        {
+            return seen;
+        }
+
+        set
+        {
+            seen = value;
+        }
+    }
+
+    public bool IsGameOver
+    {
+        get
+        {
+            return isGameOver;
+        }
+
+        set
+        {
+            isGameOver = value;
+        }
+    }
+
     private void Awake()
     {
         if (instance == null)
@@ -45,7 +72,7 @@ public class GameManager : MonoBehaviour {
     private void Start()
     {
         Score = 0;
-        isGameOver = false;
+        IsGameOver = false;
         player = FindObjectOfType<Player>();
     }
 
@@ -62,9 +89,14 @@ public class GameManager : MonoBehaviour {
     {
         if (player.Health <= 0)
         {
-            if (!isGameOver) {
-                isGameOver = true;
-                ShowAd();
+            if (!IsGameOver) {
+                IsGameOver = true;
+                if (!Seen)
+                    ShowAd();
+            }
+            else if (Seen)
+            {
+                FindObjectOfType<UI_Manager>().BackToMainMenu();
             }
         }
     }
@@ -91,6 +123,7 @@ public class GameManager : MonoBehaviour {
 
     public void ShowAd()
     {
+        AudioManager.instance.GetComponent<AudioSource>().mute = true;
         ShowOptions options = new ShowOptions();
         options.resultCallback = HandleShowResult;
         Advertisement.Show(placementId, options);
@@ -103,6 +136,8 @@ public class GameManager : MonoBehaviour {
             Debug.Log("Video selesai-tawarkan coin ke pemain");
             player.transform.position = new Vector2(0, -3.5f);
             player.Health = player.MaxHealth;
+            Seen = true;
+            AudioManager.instance.GetComponent<AudioSource>().mute = false;
         }
         else if (result == ShowResult.Skipped)
         {
