@@ -241,8 +241,8 @@ PlayerSettings:
   AndroidTargetArchitectures: 5
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: D:/COLLEGE/Tugas/Workshop produksi game 5/user.keystore
+  AndroidKeyaliasName: plane
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   AndroidEnableTango: 0
@@ -258,7 +258,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 0d70ced58aaaf2a4f953b30b12a7a984, type: 3}
+      m_Icon: {fileID: 2800000, guid: 42d794107ea0ec6469dc833877b8bc26, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
