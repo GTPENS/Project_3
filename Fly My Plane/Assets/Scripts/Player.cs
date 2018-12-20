@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
     private float maxHealth;
     private float health;
     private float damage;
+    private bool disableMovement;
     [SerializeField] private float playerSpeed;
     [SerializeField] private float offsetDamage;
 
@@ -66,6 +67,19 @@ public class Player : MonoBehaviour {
         }
     }
 
+    public bool DisableMovement
+    {
+        get
+        {
+            return disableMovement;
+        }
+
+        set
+        {
+            disableMovement = value;
+        }
+    }
+
     public int GetPrefsHealth()
     {
         return PlayerPrefs.GetInt("Player Health");
@@ -91,13 +105,16 @@ public class Player : MonoBehaviour {
 
     private void Update ()
     {
+        /*
+        Debug.Log("disabled movement? " + DisableMovement);
         Debug.Log("prefs player health = " + GetPrefsHealth());
         Debug.Log("prefs player dmg = " + GetPrefsDamage());
 
         Debug.Log("MAX health = " + MaxHealth);
         Debug.Log("health = " + Health);
         Debug.Log("damage = " + Damage);
-        
+        */
+
         MaxHealth = PersistentManager.getDefensiveLevelUpgrade(GetPrefsHealth());
         Damage = PersistentManager.getOffensiveLevelUpgrade(GetPrefsDamage());
         if (Input.acceleration.x != 0)
@@ -110,8 +127,9 @@ public class Player : MonoBehaviour {
         {
             uiManager.ReduceHealth(offsetDamage * Time.deltaTime);
         }
-        
+
         //development testing
+       
         if (Input.GetKey(KeyCode.D))
         {
             Move(PlayerSpeed * Time.deltaTime);
@@ -119,7 +137,7 @@ public class Player : MonoBehaviour {
         else if (Input.GetKey(KeyCode.A))
         {
             Move(-PlayerSpeed * Time.deltaTime);
-        }
+        }/*
         if (Input.GetKeyDown(KeyCode.Q))
         {
             DefensiveUpgrade();
@@ -127,22 +145,26 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             OffensiveUpgrade();
-        }
+        }*/
+        
     }
 
     public void Move(float speed)
     {
-        if (speed > 0.5f)
+        if (!DisableMovement)
         {
-            speed = 0.5f;
+            if (speed > 0.5f)
+            {
+                speed = 0.5f;
+            }
+
+            if (speed < -0.5f)
+            {
+                speed = -0.5f;
+            }
+
+            transform.Translate(speed, 0, 0);
         }
-        
-        if (speed < -0.5f)
-        {
-            speed = -0.5f;
-        }
-        
-        transform.Translate(speed, 0, 0);
     }
     
 
@@ -239,6 +261,7 @@ public class Player : MonoBehaviour {
             Destroy(collision.gameObject);
         }
     }
+    /*
     void DefensiveUpgrade()
     {
         AudioManager.instance.PlayOtherSFX(5);
@@ -255,5 +278,5 @@ public class Player : MonoBehaviour {
         {
             PlayerPrefs.SetInt("Player Damage", GetPrefsDamage() + 1);
         }
-    }
+    }*/
 }

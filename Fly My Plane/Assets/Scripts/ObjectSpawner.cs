@@ -6,6 +6,8 @@ using Random = UnityEngine.Random;
 public class ObjectSpawner : MonoBehaviour {
 
     [SerializeField] private float spawnRate = 7.5f;
+    private Vector2 min;
+    private Vector2 max;
 
     public GameObject[] asteroid;
     
@@ -17,13 +19,42 @@ public class ObjectSpawner : MonoBehaviour {
 	
     public void SpawnAsteroid()
     {
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
-        Instantiate(asteroid[Random.Range(0, 4)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
-        NextAsteroidSpawn();
+        switch (GameManager.instance.GameState)
+        {
+            case "Start of The Game":
+                min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+                max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
+                Instantiate(asteroid[Random.Range(0, 1)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                NextAsteroidSpawn();
+                break;
+            case "Level 1":
+                min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+                max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
+                Instantiate(asteroid[Random.Range(0, 2)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                NextAsteroidSpawn();
+                break;
+            case "Level 2":
+                min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+                max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
+                Instantiate(asteroid[Random.Range(0, 3)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                NextAsteroidSpawn();
+                break;
+            case "Level 3":
+                min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+                max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
+                Instantiate(asteroid[Random.Range(0, 4)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                NextAsteroidSpawn();
+                break;
+            case "Level 4":
+                min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+                max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
+                Instantiate(asteroid[Random.Range(0, 4)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                NextAsteroidSpawn();
+                break;
+        }
     }
 
-    private void NextAsteroidSpawn()
+    public void NextAsteroidSpawn()
     {
         float spawnInSeconds;
         if (spawnRate > 1f)
@@ -39,5 +70,10 @@ public class ObjectSpawner : MonoBehaviour {
             spawnRate--;
         else
             CancelInvoke("IncreaseSpawnRate");
+    }
+
+    public void Canceling()
+    {
+        CancelInvoke("SpawnAsteroid");
     }
 }

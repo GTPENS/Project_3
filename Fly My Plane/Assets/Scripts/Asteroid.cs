@@ -8,8 +8,8 @@ public enum AsteroidTypes
     NORMAL = 1,
     SMALL = 2,
     ARMORED = 3,
-    SPLITTING = 4,
-    FAST = 5
+    FAST = 4,
+    SPLITTING = 5
 }
 
 public class Asteroid : MonoBehaviour {

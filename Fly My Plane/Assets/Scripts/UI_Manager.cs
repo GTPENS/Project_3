@@ -8,23 +8,49 @@ public class UI_Manager : MonoBehaviour {
 
     public Slider sliderHealth;
     public Text txtScore;
+    public Image imgPopUp;
     private Player player;
+    private Gun gun;
+    private EnemySpawner enemySpawner;
+    private ObjectSpawner objectSpawner;
 
     // Use this for initialization
     void Awake()
     {
-        player = FindObjectOfType<Player>();
-        sliderHealth.maxValue = player.MaxHealth;
-        sliderHealth.value = player.Health;
-        txtScore.text = "" + GameManager.instance.Score;
+        if(SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            Time.timeScale = 1;
+            player = FindObjectOfType<Player>();
+            gun = FindObjectOfType<Gun>();
+            enemySpawner = FindObjectOfType<EnemySpawner>();
+            objectSpawner = FindObjectOfType<ObjectSpawner>();
+            sliderHealth.maxValue = player.MaxHealth;
+            sliderHealth.value = player.Health;
+            txtScore.text = "" + GameManager.instance.Score;
+            player.DisableMovement = true;
+            gun.enabled = false;
+            enemySpawner.enabled = false;
+            objectSpawner.enabled = false;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        sliderHealth.maxValue = player.MaxHealth;
-        sliderHealth.value = player.Health;
-        txtScore.text = "" + GameManager.instance.Score;
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            sliderHealth.maxValue = player.MaxHealth;
+            sliderHealth.value = player.Health;
+            txtScore.text = "" + GameManager.instance.Score;
+        }
+    }
+
+    public void TouchToStart()
+    {
+        player.DisableMovement = false;
+        gun.enabled = true;
+        enemySpawner.enabled = true;
+        objectSpawner.enabled = true;
     }
 
     public void StartGame()
@@ -71,5 +97,10 @@ public class UI_Manager : MonoBehaviour {
         AudioManager.instance.PlayAudio(0);
         Debug.Log("Exit");
         Application.Quit();
+    }
+
+    public void ShowAd()
+    {
+        GameManager.instance.ShowAd();
     }
 }

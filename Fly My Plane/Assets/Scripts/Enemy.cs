@@ -8,8 +8,8 @@ public enum EnemyTypes
 {
     SCOUT = 1,
     FIGHTER = 2,
-    BOMBER = 3,
-    MERCHANT = 4
+    MERCHANT = 3,
+    BOMBER = 4
 }
 
 public class Enemy : MonoBehaviour {

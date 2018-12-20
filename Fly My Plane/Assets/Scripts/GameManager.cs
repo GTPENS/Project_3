@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour {
     private int score;
     private bool isGameOver;
     private bool seen;
+    private string gameState;
     private Player player;
 
     string placementId = "rewardedVideo";
@@ -58,6 +60,19 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public string GameState
+    {
+        get
+        {
+            return gameState;
+        }
+
+        set
+        {
+            gameState = value;
+        }
+    }
+
     private void Awake()
     {
         if (instance == null)
@@ -74,31 +89,76 @@ public class GameManager : MonoBehaviour {
         Score = 0;
         IsGameOver = false;
         player = FindObjectOfType<Player>();
+        GameState = "Start of The Game";
+        StartCoroutine(StateCheck());
     }
 
     private void Update()
     {
+        Debug.Log("GAME STATE = " + GameState);
         if(player == null)
         {
             player = FindObjectOfType<Player>();
         }
         CheckGameOver();
+        //ChangeState();
+    }
+
+    //tambahno nang kene nek bengong Line
+    private IEnumerator StateCheck()
+    {
+        
+        yield return new WaitForSecondsRealtime(120f);
+        StartCoroutine(StateCheck());
+    }
+
+    private void ChangeState()
+    {
+        /*if (Score >= 500)
+        {
+            GameState = "Level 4";
+        }
+        else if (Score >= 300)
+        {
+            GameState = "Level 3";
+        }
+        else if (Score >= 150)
+        {
+            GameState = "Level 2";
+        }
+        else if(Score >= 50)
+        {
+            GameState = "Level 1";
+        }*/
     }
 
     private void CheckGameOver()
     {
-        if (player.Health <= 0)
+        if(player != null)
         {
-            if (!IsGameOver) {
-                IsGameOver = true;
-                if (!Seen)
-                    ShowAd();
-            }
-            else if (Seen)
+            if (player.Health <= 0)
             {
-                FindObjectOfType<UI_Manager>().BackToMainMenu();
+                if (!IsGameOver)
+                {
+                    IsGameOver = true;
+                    if (!Seen)
+                    {
+                        UI_Manager ui = FindObjectOfType<UI_Manager>();
+                        ui.imgPopUp.gameObject.SetActive(true);
+                        FindObjectOfType<Player>().enabled = false;
+                        FindObjectOfType<EnemySpawner>().Canceling();
+                        FindObjectOfType<ObjectSpawner>().Canceling();
+                        FindObjectOfType<Gun>().enabled = false;
+                        //ShowAd();
+                    }
+                }
+                else if (Seen)
+                {
+                    FindObjectOfType<UI_Manager>().BackToMainMenu();
+                }
             }
         }
+        
     }
 
     public IEnumerator TimeDilation()
@@ -133,19 +193,30 @@ public class GameManager : MonoBehaviour {
     {
         if (result == ShowResult.Finished)
         {
-            Debug.Log("Video selesai-tawarkan coin ke pemain");
             player.transform.position = new Vector2(0, -3.5f);
             player.Health = player.MaxHealth;
             Seen = true;
             AudioManager.instance.GetComponent<AudioSource>().mute = false;
+            FindObjectOfType<Player>().enabled = true;
+            FindObjectOfType<EnemySpawner>().NextEnemySpawn();
+            FindObjectOfType<ObjectSpawner>().NextAsteroidSpawn();
+            FindObjectOfType<Gun>().enabled = true;
         }
         else if (result == ShowResult.Skipped)
         {
-            Debug.LogWarning("Video dilewati-tidak menawarkan coin ke pemain");
+            player.transform.position = new Vector2(0, -3.5f);
+            player.Health = player.MaxHealth;
+            Seen = true;
+            AudioManager.instance.GetComponent<AudioSource>().mute = false;
+            FindObjectOfType<Player>().enabled = true;
+            FindObjectOfType<EnemySpawner>().NextEnemySpawn();
+            FindObjectOfType<ObjectSpawner>().NextAsteroidSpawn();
+            FindObjectOfType<Gun>().enabled = true;
         }
         else if (result == ShowResult.Failed)
         {
-            Debug.LogError("Video tidak ditampilkan");
+            UI_Manager ui = FindObjectOfType<UI_Manager>();
+            ui.BackToMainMenu();
         }
     }
 }

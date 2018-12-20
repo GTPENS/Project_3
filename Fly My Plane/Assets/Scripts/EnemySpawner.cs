@@ -8,6 +8,8 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private float spawnRate = 25f;
     private int spawnChance;
+    private Vector2 min;
+    private Vector2 max;
 
     public GameObject[] enemy;
 
@@ -15,27 +17,55 @@ public class EnemySpawner : MonoBehaviour
     private void Start()
     {
         Invoke("SpawnEnemy", spawnRate);
-        InvokeRepeating("IncreaseSpawnRate", 0f, 60f);
+        InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
     }
 
     public void SpawnEnemy()
     {
-        spawnChance = Random.Range(0, 100);
-        Debug.Log("chance = " + spawnChance);
-        Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
-        Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
-        if(spawnChance > 75)
-            Instantiate(enemy[0], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
-        else if(spawnChance > 50)
-            Instantiate(enemy[1], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
-        else if(spawnChance > 25)
-            Instantiate(enemy[2], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
-        else if(spawnChance > 10)
-            Instantiate(enemy[3], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
-        NextEnemySpawn();
+        switch (GameManager.instance.GameState)
+        {
+            case "Start of The Game":
+                NextEnemySpawn();
+                break;
+            case "Level 1":
+                NextEnemySpawn();
+                break;
+            case "Level 2":
+                min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+                max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
+                Instantiate(enemy[0], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                NextEnemySpawn();
+                break;
+            case "Level 3":
+                spawnChance = Random.Range(0, 100);
+                min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+                max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
+                if (spawnChance > 75)
+                    Instantiate(enemy[0], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                else if (spawnChance > 50)
+                    Instantiate(enemy[1], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                else if (spawnChance > 25)
+                    Instantiate(enemy[2], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                NextEnemySpawn();
+                break;
+            case "Level 4":
+                spawnChance = Random.Range(0, 100);
+                min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
+                max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
+                if (spawnChance > 75)
+                    Instantiate(enemy[0], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                else if (spawnChance > 50)
+                    Instantiate(enemy[1], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                else if (spawnChance > 25)
+                    Instantiate(enemy[2], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                else if (spawnChance > 10)
+                    Instantiate(enemy[3], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
+                NextEnemySpawn();
+                break;
+        }
     }
 
-    private void NextEnemySpawn()
+    public void NextEnemySpawn()
     {
         float spawnInSeconds;
         if (spawnRate > 1f)
@@ -51,5 +81,10 @@ public class EnemySpawner : MonoBehaviour
             spawnRate--;
         else
             CancelInvoke("IncreaseSpawnRate");
+    }
+
+    public void Canceling()
+    {
+        CancelInvoke("SpawnAsteroid");
     }
 }
