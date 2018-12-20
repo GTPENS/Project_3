@@ -11,8 +11,12 @@ public class GameManager : MonoBehaviour {
     private int score;
     private bool isGameOver;
     private bool seen;
-    private string gameState;
+    private int gameState;
+    private int tempScore;
     private Player player;
+
+    private const int ENUM_DANGER_LEVEL_UP_TRESHOLD = 200;
+    private const int ENUM_DANGER_LEVEL_DOWN_TRESHOLD = 100;
 
     string placementId = "rewardedVideo";
 #if UNITY_IOS
@@ -31,6 +35,16 @@ public class GameManager : MonoBehaviour {
         set
         {
             score = value;
+        }
+    }
+
+    public int TempScore {
+        get {
+            return tempScore;
+        }
+
+        set {
+            tempScore = value;
         }
     }
 
@@ -60,7 +74,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public string GameState
+    public int GameState
     {
         get
         {
@@ -87,9 +101,10 @@ public class GameManager : MonoBehaviour {
     private void Start()
     {
         Score = 0;
+        TempScore = 0;
         IsGameOver = false;
         player = FindObjectOfType<Player>();
-        GameState = "Start of The Game";
+        GameState = 0;
         StartCoroutine(StateCheck());
     }
 
@@ -107,29 +122,24 @@ public class GameManager : MonoBehaviour {
     //tambahno nang kene nek bengong Line
     private IEnumerator StateCheck()
     {
-        
-        yield return new WaitForSecondsRealtime(120f);
+        if (TempScore < ENUM_DANGER_LEVEL_DOWN_TRESHOLD)
+            ChangeState(false);
+        else if (TempScore > ENUM_DANGER_LEVEL_UP_TRESHOLD)
+            ChangeState(true);
+
+        TempScore = 0;
+        yield return new WaitForSecondsRealtime(60f);
         StartCoroutine(StateCheck());
     }
 
-    private void ChangeState()
+    private void ChangeState(bool up)
     {
-        /*if (Score >= 500)
-        {
-            GameState = "Level 4";
-        }
-        else if (Score >= 300)
-        {
-            GameState = "Level 3";
-        }
-        else if (Score >= 150)
-        {
-            GameState = "Level 2";
-        }
-        else if(Score >= 50)
-        {
-            GameState = "Level 1";
-        }*/
+        if (up && GameState < 4)
+            GameState++;
+
+        if (!up && GameState > 0)
+            GameState--;
+
     }
 
     private void CheckGameOver()

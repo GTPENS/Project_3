@@ -24,19 +24,19 @@ public class EnemySpawner : MonoBehaviour
     {
         switch (GameManager.instance.GameState)
         {
-            case "Start of The Game":
+            case 0:
                 NextEnemySpawn();
                 break;
-            case "Level 1":
+            case 1:
                 NextEnemySpawn();
                 break;
-            case "Level 2":
+            case 2:
                 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
                 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
                 Instantiate(enemy[0], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
                 NextEnemySpawn();
                 break;
-            case "Level 3":
+            case 3:
                 spawnChance = Random.Range(0, 100);
                 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
                 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
@@ -48,7 +48,7 @@ public class EnemySpawner : MonoBehaviour
                     Instantiate(enemy[2], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
                 NextEnemySpawn();
                 break;
-            case "Level 4":
+            case 4:
                 spawnChance = Random.Range(0, 100);
                 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
                 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));

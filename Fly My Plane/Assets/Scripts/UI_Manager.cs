@@ -63,6 +63,7 @@ public class UI_Manager : MonoBehaviour {
     public void AddScore(int _score)
     {
         GameManager.instance.Score += _score;
+        GameManager.instance.TempScore += _score;
     }
 
     public void ReduceHealth(float _damage)

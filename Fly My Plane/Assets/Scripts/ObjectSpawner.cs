@@ -21,31 +21,31 @@ public class ObjectSpawner : MonoBehaviour {
     {
         switch (GameManager.instance.GameState)
         {
-            case "Start of The Game":
+            case 0:
                 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
                 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
                 Instantiate(asteroid[Random.Range(0, 1)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
                 NextAsteroidSpawn();
                 break;
-            case "Level 1":
+            case 1:
                 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
                 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
                 Instantiate(asteroid[Random.Range(0, 2)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
                 NextAsteroidSpawn();
                 break;
-            case "Level 2":
+            case 2:
                 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
                 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
                 Instantiate(asteroid[Random.Range(0, 3)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
                 NextAsteroidSpawn();
                 break;
-            case "Level 3":
+            case 3:
                 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
                 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
                 Instantiate(asteroid[Random.Range(0, 4)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
                 NextAsteroidSpawn();
                 break;
-            case "Level 4":
+            case 4:
                 min = Camera.main.ViewportToWorldPoint(new Vector2(0.2f, 0));
                 max = Camera.main.ViewportToWorldPoint(new Vector2(0.8f, 1));
                 Instantiate(asteroid[Random.Range(0, 4)], new Vector2(Random.Range(min.x, max.x), max.y), Quaternion.identity);
